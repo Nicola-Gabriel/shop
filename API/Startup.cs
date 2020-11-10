@@ -58,6 +58,7 @@ namespace API
             app.UseRouting();
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
+            app.UseStaticFiles("/API/wwwroot/images/products/{0}");
 
             app.UseAuthorization();
 
