@@ -15,3 +15,25 @@
     max-width: 150px;
     max-height: 75px;
 }
+
+a {
+    color: #343a40;
+    text-decoration: none;
+
+    &.active {
+        color: rgba(13, 2, 112, 0.986);
+        font-weight: bold;
+        
+    }
+    &#txt {
+        font-size: 20px;
+    }
+}
+
+.logo {
+    cursor: pointer;
+
+    &:focus {
+        outline: none;
+    }
+}

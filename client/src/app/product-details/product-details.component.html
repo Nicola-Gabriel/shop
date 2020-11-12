@@ -1,0 +1,25 @@
+<div class="row" *ngIf="product">
+    <div class="col-6">
+        <img src="{{product.pictureUrl}}" alt="{{product.name}}" class="img-fluid w-70">
+    </div>
+
+    <div class="col-6">
+        <h1>{{product.name}}</h1>
+        <p>{{product.price | currency}}</p>
+        <i class="fa fa-plus-circle mr-1" style="font-size: 1.5em; cursor: pointer;"></i>
+        <span style="font-size: 1.5em; cursor: pointer;" class="font-weight-bold">1</span>
+        <i class="fa fa-minus-circle ml-1" style="font-size: 1.5em; cursor: pointer;"></i>
+        <button class="btn-outline-secondary btn-lg ml-2" style="cursor: pointer">Add to Cart</button>
+
+        <div class="row mt-5">
+            <h5>Description</h5>
+            
+            <p>{{product.description}}</p>
+        </div>
+
+    </div>
+    
+</div>
+
+
+
