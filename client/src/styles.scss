@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+@import  '../node_modules/bootswatch/dist/united/bootstrap.min.css';
+
+.xng-breadcrumb-root {
+    padding: 8px 16px;
+    display: inline;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+label.xng-breadcrumb-trail {
+    margin-bottom: 0;
+    color: rgba(13, 2, 112, 0.986);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.xng-breadcrumb-separator {
+    padding: 0 0;
+}
