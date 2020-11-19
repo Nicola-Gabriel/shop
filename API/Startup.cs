@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -33,6 +34,7 @@ namespace API
         {
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddControllers();
             services.AddAutoMapper(typeof(MapperProfiles));
             services.AddCors(opt => {
@@ -42,6 +44,11 @@ namespace API
             });
             services.AddDbContext<StoreContext>(x => 
                 x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddSingleton<IConnectionMultiplexer>(c => {
+                var configuration = ConfigurationOptions.Parse(_configuration.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
