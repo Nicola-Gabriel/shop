@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Extensions;
 using API.Helpers;
 using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Identity;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +35,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
             services.AddScoped<IBasketRepository, BasketRepository>();
@@ -44,11 +48,21 @@ namespace API
             });
             services.AddDbContext<StoreContext>(x => 
                 x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
+            
+            services.AddDbContext<AppUserDbContext>(x =>
+                {
+                    x.UseSqlite(_configuration.GetConnectionString("IdentityDbContext"));
+                }
+            );
+
+           
 
             services.AddSingleton<IConnectionMultiplexer>(c => {
                 var configuration = ConfigurationOptions.Parse(_configuration.GetConnectionString("Redis"), true);
                 return ConnectionMultiplexer.Connect(configuration);
             });
+
+          services.AddIdentityServices(_configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +80,7 @@ namespace API
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
             app.UseStaticFiles("/API/wwwroot/images/products/{0}");
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

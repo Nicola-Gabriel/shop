@@ -12,6 +12,7 @@ import { InterceptorError } from './core/error.interceptor';
 import { LoadingInterceptor } from './core/spinner.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from './shared/shared.module';
+import { CheckoutModule } from './checkout/checkout.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SharedModule } from './shared/shared.module';
     CoreModule,
     HomeModule,
     NgxSpinnerModule,
-    SharedModule
+    SharedModule,
+    CheckoutModule
   ],
   providers: [
     {

@@ -8,9 +8,9 @@
       <a id="txt" class="p-2" href="#">Contact</a>
     </nav>
     <div class="d-flex align-items-center">
-        <a class="position-relative">
+        <a routerLink="/basket" class="position-relative">
             <i class="fa fa-shopping-cart mr-5 fa-2x text-dark"></i>
-            <div class="cart-no">3</div>
+            <div *ngIf="(basket$ | async) as basket" class="cart-no">{{basket.items.length}}</div>
         </a>
         <a class="btn btn-outline-secondary mr-3">Login</a>
         <a class="btn btn-outline-secondary mr-2">Sign up</a>
