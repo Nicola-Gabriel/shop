@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-center mt-5">
+    <div class="col-3">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" >
+    
+            <div class="form-label-group">
+              <input type="email" 
+                     formControlName="email" 
+                     id="inputEmail" 
+                     class="form-control" 
+                     placeholder="Email address" 
+                    >
+              <label for="email">Email address</label>
+              <span class="text-danger"
+                         *ngIf="registerForm.get('email').invalid &&
+                           registerForm.get('email').touched &&
+                           registerForm.get('email').errors['required'] "         
+            >Email address is required for registration</span>
+            <span class="text-danger" *ngIf="registerForm.get('email').invalid &&
+                           registerForm.get('email').touched &&
+                           registerForm.get('email').errors['pattern'] "         
+            >Choose a valid email address</span>
+            </div>
+    
+            <div class="form-label-group">
+                <input type="text"
+                       formControlName="displayName"
+                       id="inputDisplayName"
+                       class="form-control" 
+                       placeholder="Display name" 
+                >
+                <label for="inputDisplayName">Display Name</label>
+                <span class="text-danger" *ngIf="registerForm.get('displayName').invalid &&
+                           registerForm.get('displayName').touched &&
+                           registerForm.get('displayName').errors['required'] "         
+            >You need a display name</span>
+            <span class="text-danger" *ngIf="registerForm.get('displayName').invalid &&
+                           registerForm.get('displayName').touched &&
+                           registerForm.get('displayName').errors['pattern'] "         
+            >Choose a valid name </span>
+              </div>
+          
+            <div class="form-label-group">
+              <input type="password" 
+                     formControlName="password"
+                     id="inputPassword"
+                     class="form-control" 
+                     placeholder="Password" 
+                >
+              <label for="inputPassword">Password</label>
+              <span class="text-danger" *ngIf="registerForm.get('password').invalid &&
+                           registerForm.get('password').touched &&
+                           registerForm.get('password').errors['required'] "         
+            >You need a password </span>
+            <span class="text-danger" *ngIf="registerForm.get('password').invalid &&
+                           registerForm.get('password').touched &&
+                           registerForm.get('password').errors['pattern'] "         
+            >Choose a valid password </span>
+            </div>
+
+            <ul *ngIf="error" class="text-danger list-unstyled">
+              <li *ngFor="let error of error">
+                {{error}}
+              </li>
+            </ul>
+
+            <button [disabled]="!(registerForm.get('password').valid && registerForm.get('displayName').valid)"class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+          </form>
+    </div>
+</div>

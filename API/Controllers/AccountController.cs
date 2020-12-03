@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace API.Controllers
 {
     public class AccountController : BaseApiController
     {
+         public IEnumerable<string> Errors { get; set; }
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
@@ -41,7 +43,7 @@ namespace API.Controllers
         };
     }
 
-    [HttpGet("userexists")]
+    [HttpGet("emailexists")]
     public async Task<ActionResult<bool>> VerifyIfUserExists([FromQuery] string email)
     {
         return await _userManager.FindByEmailAsync(email) != null;
@@ -91,10 +93,11 @@ namespace API.Controllers
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        var emailExists = await _userManager.FindByEmailAsync(registerDto.Email);
-        if (emailExists != null)
+       
+
+        if (VerifyIfUserExists(registerDto.Email).Result.Value)
         {
-            return BadRequest("Email in use");
+            return new BadRequestObjectResult( Errors = new []{"Email is in use"});
         }
         var user = new AppUser
         {

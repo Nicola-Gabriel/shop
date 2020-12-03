@@ -4,6 +4,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { BreadcrumbModule } from 'xng-breadcrumb';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -12,7 +13,8 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
   imports: [
     CommonModule,
     RouterModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    SharedModule
   ],
   exports: [
     NavBarComponent,

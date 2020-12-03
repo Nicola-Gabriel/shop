@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { ShopComponent } from './shop/shop.component';
@@ -10,8 +11,12 @@ const routes: Routes = [
      data: {breadcrumb: 'Shop'}},
   {path: 'basket', loadChildren: () => import('./basket/basket.module').then(mod => mod.BasketModule),
      data: {breadcrumb: 'Basket'}},
-     {path: 'checkout', loadChildren: () => import('./checkout/checkout.module').then(mod => mod.CheckoutModule),
+  {path: 'checkout',
+   canActivate: [AuthGuard],
+   loadChildren: () => import('./checkout/checkout.module').then(mod => mod.CheckoutModule),
      data: {breadcrumb: 'Checkout'}},
+  {path: 'account', loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule),
+     data: {breadcrumb: {skip: true}}},
   {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
