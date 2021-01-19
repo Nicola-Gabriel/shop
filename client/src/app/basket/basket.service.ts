@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Basket, IBasket, IBasketItem, IBasketTotal } from '../shared/Models/basket';
+import { IDeliveryMethod } from '../shared/models/deliveryMethod';
 import { IProduct } from '../shared/Models/Product';
 
 @Injectable({
@@ -10,6 +11,7 @@ import { IProduct } from '../shared/Models/Product';
 })
 export class BasketService {
   baseUrl = 'https://localhost:5001/api/';
+  shippingPrice = 0;
   private basketSource = new BehaviorSubject<IBasket>(null);
   public basket$ = this.basketSource.asObservable();
   private basketTotal = new BehaviorSubject<IBasketTotal>(null);
@@ -37,6 +39,10 @@ export class BasketService {
 
   returnBasketValue() {
    return this.basketSource.value;
+  }
+
+  getBasketValue() {
+    return this.basketTotal.value;
   }
 
   addItemToBasket(item: IProduct, quantity = 1) {
@@ -109,10 +115,10 @@ export class BasketService {
 
   private calculateTotal() {
     const basket = this.returnBasketValue();
-    const shipping = 0;
+    const shippingPrice = this.shippingPrice;
     const subtotal = basket.items.reduce((a, b) => (b.quantity * b.price) + a, 0);
-    const total = subtotal + shipping;
-    this.basketTotal.next({shipping, subtotal, total});
+    const total = subtotal + shippingPrice;
+    this.basketTotal.next({shippingPrice, subtotal, total});
   }
 
   private mapProductItemToBasketItem(item: IProduct, quantity: number): IBasketItem {
@@ -126,5 +132,33 @@ export class BasketService {
       type: item.productType
     };
   }
+
+  createPaymentIntent() {
+    return this.http.post(this.baseUrl + 'payments/' + this.returnBasketValue().id, {})
+      .pipe(
+        map((basket: IBasket) => {
+          this.basketSource.next(basket);
+        })
+      );
+  }
+
+  setShippingPrice(deliveryMethod: IDeliveryMethod) {
+    this.shippingPrice = deliveryMethod.price;
+    const basket = this.returnBasketValue();
+    basket.deliveryMethodId = deliveryMethod.id;
+    basket.shippingPrice = deliveryMethod.price;
+    this.calculateTotals();
+    this.setBasket(basket);
+  }
+
+  private calculateTotals() {
+    const basket = this.returnBasketValue();
+    const shippingPrice = this.shippingPrice;
+    const subtotal = basket.items.reduce((a, b) => (b.price * b.quantity) + a, 0);
+    const total = subtotal + shippingPrice;
+    this.basketTotal.next({shippingPrice, total, subtotal});
+  }
+
+
 
 }

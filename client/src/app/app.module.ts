@@ -13,6 +13,9 @@ import { LoadingInterceptor } from './core/spinner.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from './shared/shared.module';
 import { CheckoutModule } from './checkout/checkout.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ToastrModule } from 'ngx-toastr';
+import { JwtInterceptor } from './core/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { CheckoutModule } from './checkout/checkout.module';
     HomeModule,
     NgxSpinnerModule,
     SharedModule,
-    CheckoutModule
+    CheckoutModule,
+    FontAwesomeModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     {
@@ -39,6 +44,11 @@ import { CheckoutModule } from './checkout/checkout.module';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
       multi: true
     }
   ],
